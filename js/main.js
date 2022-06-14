@@ -26,7 +26,6 @@ const AUTHOR = {
   avatar : `img/avatars/user${RANDOM_AUTHOR_AVATARS}.png` ,
 };
 
-console.log(AUTHOR.avatar);
 
 const TYPE_HOUSING = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const RANDOM_TYPE_HOUSING = getRandomPositiveInteger(0,TYPE_HOUSING.length-1);
@@ -73,4 +72,3 @@ const OFFER = {
   photos : GET_NEW_ARRAY(PHOTOS_LIST)
 };
 
-console.log(OFFER);
