@@ -19,9 +19,6 @@ function getRandomPositiveInteger (a, b) {
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 }
-// var myNumber = 13;
-// var formattedNumber = ("0" + myNumber).slice(-2);
-// console.log(formattedNumber);
 
 const RANDOM_AUTHOR_AVATARS = (`0${ getRandomPositiveInteger(1, 10)}`).slice(-2);
 
@@ -76,31 +73,4 @@ const OFFER = {
   photos : GET_NEW_ARRAY(PHOTOS_LIST)
 };
 
-
 console.log(OFFER);
-
-// const SURNAMES = [
-//   'да Марья',
-//   'Верон',
-//   'Мирабелла',
-//   'Вальц',
-//   'Онопко',
-//   'Топольницкая',
-//   'Нионго',
-//   'Ирвинг',
-// ];
-// const COAT_COLORS = [
-//   'rgb(101, 137, 164)',
-//   'rgb(241, 43, 107)',
-//   'rgb(146, 100, 161)',
-//   'rgb(56, 159, 117)',
-//   'rgb(215, 210, 55)',
-//   'rgb(0, 0, 0)',
-// ];
-// const EYES_COLORS = [
-//   'black',
-//   'red',
-//   'blue',
-//   'yellow',
-//   'green',
-// ];
