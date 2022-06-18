@@ -1,7 +1,3 @@
-// Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
-//  Будет использоваться для генерации временных географических координат в следующем задании.
-//  Пример использования функции:
-
 function getRandomPositiveFloat (min,max, maxDigits = 0) {
   if (min > max || min < 0 || max <= 0) {
     return ('Задан неверный диапазон! Укажите другие числа.');
@@ -20,55 +16,104 @@ function getRandomPositiveInteger (a, b) {
   return Math.floor(result);
 }
 
-const RANDOM_AUTHOR_AVATARS = (`0${ getRandomPositiveInteger(1, 10)}`).slice(-2);
+const AMOUNT_ARRAYS = 10;
 
-const AUTHOR = {
-  avatar : `img/avatars/user${RANDOM_AUTHOR_AVATARS}.png` ,
-};
-
-
-const TYPE_HOUSING = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-const RANDOM_TYPE_HOUSING = getRandomPositiveInteger(0,TYPE_HOUSING.length-1);
-
-const CHECK_IN_LIST = ['12:00','13:00','14:00'];
-const RANDOM_CHECK_IN_LIST = getRandomPositiveInteger(0,CHECK_IN_LIST.length-1);
-
-const CHECK_OUT_LIST = ['12:00','13:00','14:00'];
-const RANDOM_CHECK_OUT_LIST = getRandomPositiveInteger(0,CHECK_OUT_LIST.length-1);
-
-const FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
-const GET_NEW_ARRAY = function (array)  {
-  const NEW_ARRAY = [];
-  const NEW_ARRAY_LENGTH = getRandomPositiveInteger(1, array.length);
-
-  for (let i = 1; i <= NEW_ARRAY_LENGTH; i++) {
-    const OPTIONS = array.shift();
-    NEW_ARRAY.push(OPTIONS);
+const authorNumber =[];
+function authorGenerate () {
+  for (let i=1;i<=AMOUNT_ARRAYS;i++) {
+    authorNumber[i]=i;
   }
-  return NEW_ARRAY;
+  return authorNumber;
+}
+
+const author = {
+  avatar : `img/avatars/user${authorGenerate()}.png` ,
 };
 
-const PHOTOS_LIST =['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
+const titleHotels = ['','Отель Гельвеция','Арт Отель','Лахта Плаза','Кино Хостел на Выборгской','Александр Хаус',
+  'Галунов Отель','Соул Китчен Джуниор Хостел','Камердинеръ Отель','Гостиница Моя','Центр Отель'
+];
 
-const LOCATION = {
+const descriptionHotels = ['','Остановитесь в самом центре! 5-звездочный отель "Гельвеция" расположен в 2 минутах ходьбы от Невского проспекта и станции метро «Маяковская».',
+  'Новый современный бизнес-отель, отвечающий актуальным требованиям и тенденциям сферы гостеприимства.',
+  'Новый бизнес-отель на берегу Финского залива, в новом деловом центре Петербурга.',
+  'Самый дизайнерский и уютный хостел, который вы видели.',
+  'Вы будете чувствовать себя в Москве как дома благодаря услугам, которые предлагает этот b&b.',
+  'Расположен в Санкт-Петербурге, в 7 минутах ходьбы от площади Восстания.',
+  'Расположена в зеленой зоне города Самара рядом с рекой Волгой',
+  'Отличный выбор для гостей Санкт-Петербурга, семейная атмосфера и множество полезных услуг сделают пребывание здесь очень приятным.',
+  'Наша квартира 8 гостей идеально подойдет для всех типов путешественников: туристы, пары, небольшие семьи, бизнес-туристы.',
+  'Прекрасный выбор для тех, кто хочет восстановить силы.'
+
+];
+
+const typeHousing = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+
+const checkInList = ['12:00','13:00','14:00'];
+
+const checkOutList = ['12:00','13:00','14:00'];
+
+const featuresList = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+
+const locations = {
   lat : getRandomPositiveFloat(35.65, 35.7, 5),
-  lng : getRandomPositiveFloat(139.7, 139.8, 5)
+  lng : getRandomPositiveFloat(139.7, 139.8, 5),
 };
 
-const OFFER = {
-  title : 'Отель "Космос"',
-  address : [LOCATION.lat, LOCATION.lng],
+const photosList = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+];
+
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+const getNewRandomFeaturesList = function (arrayNumber)  {
+  const newArray = [];
+  const copyArray = featuresList.slice();
+  shuffle(copyArray);
+  for (let i = 0; i < arrayNumber; i++) {
+    const options = copyArray.shift();
+    newArray.push(options);
+  }
+  return newArray;
+};
+
+const getNewRandomPhotosList = function (arrayNumber)  {
+  const newArray = [];
+  const copyArray = photosList.slice();
+  shuffle(copyArray);
+  for (let i = 0; i < arrayNumber-1; i++) {
+    const options = copyArray[i];
+    newArray.push(options);
+  }
+  return newArray;
+};
+const offer =(id) => ({
+  id,
+  author : `img/avatars/user${(`0${authorNumber[id]}`).slice(-2)}.png`,
+  title : titleHotels[id],
+  address : [getRandomPositiveFloat(35.65, 35.7, 5), getRandomPositiveFloat(139.7, 139.8, 5)],
   price : getRandomPositiveInteger(1,100000),
-  type : TYPE_HOUSING[RANDOM_TYPE_HOUSING],
+  type : typeHousing[getRandomPositiveInteger(0,4)],
   rooms : getRandomPositiveInteger(1,8),
   guests : getRandomPositiveInteger(1,6),
-  checkin : CHECK_IN_LIST[RANDOM_CHECK_IN_LIST],
-  checkout : CHECK_OUT_LIST[RANDOM_CHECK_OUT_LIST],
-  features : GET_NEW_ARRAY(FEATURES_LIST),
-  description : 'Космический отель',
-  photos : GET_NEW_ARRAY(PHOTOS_LIST)
-};
+  checkin : checkInList[getRandomPositiveInteger(0,2)],
+  checkout : checkOutList[getRandomPositiveInteger(0,2)],
+  features : getNewRandomFeaturesList(getRandomPositiveInteger(1,6)),
+  description : descriptionHotels[id],
+  photos : getNewRandomPhotosList(getRandomPositiveInteger(1,3))
+});
+
+
+function GetGenerationArray () {
+  const offers = [];
+  for (let i=1;i <= AMOUNT_ARRAYS;i++) {
+    const storeVariable= offer(i);
+    offers.push(storeVariable);
+
+  }
+  return offers;
+}
 
