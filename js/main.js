@@ -23,18 +23,14 @@ function authorGenerate () {
   for (let i=1;i<=AMOUNT_ARRAYS;i++) {
     authorNumber[i]=i;
   }
-  return authorNumber;
 }
 
-const author = {
-  avatar : `img/avatars/user${authorGenerate()}.png` ,
-};
 
-const titleHotels = ['','Отель Гельвеция','Арт Отель','Лахта Плаза','Кино Хостел на Выборгской','Александр Хаус',
+const TITLE_HOTELS = ['Отель Гельвеция','Арт Отель','Лахта Плаза','Кино Хостел на Выборгской','Александр Хаус',
   'Галунов Отель','Соул Китчен Джуниор Хостел','Камердинеръ Отель','Гостиница Моя','Центр Отель'
 ];
 
-const descriptionHotels = ['','Остановитесь в самом центре! 5-звездочный отель "Гельвеция" расположен в 2 минутах ходьбы от Невского проспекта и станции метро «Маяковская».',
+const DESCRIPTION_HOTELS = ['Остановитесь в самом центре! 5-звездочный отель "Гельвеция" расположен в 2 минутах ходьбы от Невского проспекта и станции метро «Маяковская».',
   'Новый современный бизнес-отель, отвечающий актуальным требованиям и тенденциям сферы гостеприимства.',
   'Новый бизнес-отель на берегу Финского залива, в новом деловом центре Петербурга.',
   'Самый дизайнерский и уютный хостел, который вы видели.',
@@ -47,20 +43,15 @@ const descriptionHotels = ['','Остановитесь в самом центр
 
 ];
 
-const typeHousing = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const TYPE_HOUSING = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 
-const checkInList = ['12:00','13:00','14:00'];
+const CHECK_IN_LIST = ['12:00','13:00','14:00'];
 
-const checkOutList = ['12:00','13:00','14:00'];
+const CHECK_OUT_LIST = ['12:00','13:00','14:00'];
 
-const featuresList = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-const locations = {
-  lat : getRandomPositiveFloat(35.65, 35.7, 5),
-  lng : getRandomPositiveFloat(139.7, 139.8, 5),
-};
-
-const photosList = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+const PHOTOS_LIST = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
@@ -69,51 +60,42 @@ function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
 }
 
-const getNewRandomFeaturesList = function (arrayNumber)  {
+const getNewRandomArray = function (arrayNumber,arrayName)  {
   const newArray = [];
-  const copyArray = featuresList.slice();
+  const copyArray = arrayName.slice();
   shuffle(copyArray);
   for (let i = 0; i < arrayNumber; i++) {
-    const options = copyArray.shift();
+    const options = arrayName[i];
     newArray.push(options);
   }
   return newArray;
 };
-
-const getNewRandomPhotosList = function (arrayNumber)  {
-  const newArray = [];
-  const copyArray = photosList.slice();
-  shuffle(copyArray);
-  for (let i = 0; i < arrayNumber-1; i++) {
-    const options = copyArray[i];
-    newArray.push(options);
-  }
-  return newArray;
-};
-const offer =(id) => ({
+const getHotel = (id) => ({
   id,
-  author : `img/avatars/user${(`0${authorNumber[id]}`).slice(-2)}.png`,
-  title : titleHotels[id],
-  address : [getRandomPositiveFloat(35.65, 35.7, 5), getRandomPositiveFloat(139.7, 139.8, 5)],
-  price : getRandomPositiveInteger(1,100000),
-  type : typeHousing[getRandomPositiveInteger(0,4)],
-  rooms : getRandomPositiveInteger(1,8),
-  guests : getRandomPositiveInteger(1,6),
-  checkin : checkInList[getRandomPositiveInteger(0,2)],
-  checkout : checkOutList[getRandomPositiveInteger(0,2)],
-  features : getNewRandomFeaturesList(getRandomPositiveInteger(1,6)),
-  description : descriptionHotels[id],
-  photos : getNewRandomPhotosList(getRandomPositiveInteger(1,3))
+  author : {avatar : `img/avatars/user${id < 10 ? id : 0 ,`0${id}`}.png`},
+  offer : {
+    title : TITLE_HOTELS[id],
+    address : [getRandomPositiveFloat(35.65, 35.7, 5), getRandomPositiveFloat(139.7, 139.8, 5)],
+    price : getRandomPositiveInteger(1,100000),
+    type : TYPE_HOUSING[getRandomPositiveInteger(0,4)],
+    rooms : getRandomPositiveInteger(1,8),
+    guests : getRandomPositiveInteger(1,6),
+    checkin : CHECK_IN_LIST[getRandomPositiveInteger(0,2)],
+    checkout : CHECK_OUT_LIST[getRandomPositiveInteger(0,2)],
+    features : getNewRandomArray(getRandomPositiveInteger(1,6),FEATURES_LIST),
+    description : DESCRIPTION_HOTELS[id],
+    photos : getNewRandomArray(getRandomPositiveInteger(1,3),PHOTOS_LIST)
+  },
+  location : {lat: getRandomPositiveFloat(35.65, 35.7, 5),lng :getRandomPositiveFloat(139.7, 139.8, 5)}
 });
 
 
-function GetGenerationArray () {
-  const offers = [];
-  for (let i=1;i <= AMOUNT_ARRAYS;i++) {
-    const storeVariable= offer(i);
-    offers.push(storeVariable);
-
+function getGenerationArray () {
+  const hotels = [];
+  for (let i=0;i < AMOUNT_ARRAYS;i++) {
+    hotels.push(getHotel(i));
   }
-  return offers;
+  return hotels;
 }
 
+console.log(getGenerationArray ());
