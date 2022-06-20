@@ -2,7 +2,6 @@ function getRandomPositiveFloat (min,max, maxDigits = 0) {
   if (min > max || min < 0 || max <= 0) {
     return ('Задан неверный диапазон! Укажите другие числа.');
   }
-
   const digitsDegree = 10 ** maxDigits;
   return ~~((Math.random() * (max - min) + min) * digitsDegree) / digitsDegree;
 }
@@ -17,13 +16,6 @@ function getRandomPositiveInteger (a, b) {
 }
 
 const AMOUNT_ARRAYS = 10;
-
-const authorNumber =[];
-function authorGenerate () {
-  for (let i=1;i<=AMOUNT_ARRAYS;i++) {
-    authorNumber[i]=i;
-  }
-}
 
 
 const TITLE_HOTELS = ['Отель Гельвеция','Арт Отель','Лахта Плаза','Кино Хостел на Выборгской','Александр Хаус',
@@ -72,7 +64,7 @@ const getNewRandomArray = function (arrayNumber,arrayName)  {
 };
 const getHotel = (id) => ({
   id,
-  author : {avatar : `img/avatars/user${id < 10 ? id : 0 ,`0${id}`}.png`},
+  author : {avatar : `img/avatars/user${id >= 10 ? id : `0${id}`}.png`},
   offer : {
     title : TITLE_HOTELS[id],
     address : [getRandomPositiveFloat(35.65, 35.7, 5), getRandomPositiveFloat(139.7, 139.8, 5)],
@@ -92,10 +84,8 @@ const getHotel = (id) => ({
 
 function getGenerationArray () {
   const hotels = [];
-  for (let i=0;i < AMOUNT_ARRAYS;i++) {
+  for (let i=1;i <= AMOUNT_ARRAYS;i++) {
     hotels.push(getHotel(i));
   }
   return hotels;
 }
-
-console.log(getGenerationArray ());
