@@ -3,9 +3,6 @@ import { getHotel,getGenerationArray } from './data.js';
 const canvas= document.querySelector('.map__canvas');
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-
-const arrayHotels = getGenerationArray();
-
 const getTypeHotel=function(type){
   switch(type){
     case 'flat':
@@ -41,7 +38,6 @@ const getFeatureList = function(array,features){
 };
 
 getGenerationArray().forEach((hotel) =>{
-
   const popupElement = popupTemplate.cloneNode(true);
   popupElement.querySelector('.popup__title').textContent=hotel.offer.title;
   popupElement.querySelector('.popup__text--address').textContent=hotel.offer.address;
