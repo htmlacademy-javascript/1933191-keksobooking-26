@@ -7,6 +7,7 @@ const roomsField = adForm.querySelector('[name="rooms"]');
 const capacityField = adForm.querySelector('[name="capacity"]');
 
 
+
 const makeInactiveForm = () =>{
   adForm.classList.add('ad-form--disabled');
   adFormHeader.setAttribute('disabled', 'disabled');
