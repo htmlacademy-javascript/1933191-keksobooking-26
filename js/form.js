@@ -76,16 +76,16 @@ pristine.addValidator(adForm.querySelector('#price'),validatePrice,getPriceError
 function validateSettlement () {
   const settlementOption =[ [1,2,3],[2,3],[3],[100]];
   const rooms =roomsField.querySelector('option:checked');
-  const optionRooms= roomsField.children;
   const capacity =capacityField.querySelector('option:checked');
-  if (rooms.value<=capacity.value) {
+  if (rooms.value<capacity.value) {
     roomsField.querySelectorAll('option').forEach((item) => item.parentNode.removeChild(item));
     for(let i=0;i<settlementOption[capacity.value-1].length;i++){
       const newOption = new Option(`${settlementOption[capacity.value-1][i]} комнаты`, `${settlementOption[capacity.value-1][i]}`);
       roomsField.appendChild(newOption);
     }
-    return optionRooms;
+    return false;
   }
+  return true;
 }
 
 function getRoomsErrorMessage(){
