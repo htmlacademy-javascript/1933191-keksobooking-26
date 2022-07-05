@@ -5,8 +5,13 @@ const mapFilters = document.querySelector('.map__filters');
 const mapFeatures = document.querySelector('.map__features');
 const roomsField = adForm.querySelector('[name="rooms"]');
 const capacityField = adForm.querySelector('[name="capacity"]');
-
-
+const HouseTypes = {
+  Bungalow: 'bungalow',
+  Flat: 'flat',
+  Hotel: 'hotel',
+  House: 'house',
+  Palace: 'palace'
+};
 
 const makeInactiveForm = () =>{
   adForm.classList.add('ad-form--disabled');
@@ -43,30 +48,30 @@ function getTitleErrorMessage() {
 
 function validatePrice (value) {
   switch(adForm.querySelector('#type').value){
-    case 'bungalow':
+    case HouseTypes.Bungalow:
       return value.length >= 0 && value.length <= 100000;
-    case 'flat':
+    case HouseTypes.Flat:
       return value.length >= 1000 && value.length <= 100000;
-    case 'hotel':
+    case HouseTypes.Hotel:
       return value.length >= 3000 && value.length <= 100000;
-    case 'house':
+    case HouseTypes.House:
       return value.length >= 5000 && value.length <= 100000;
-    case 'palace':
+    case HouseTypes.Palace:
       return value.length >= 10000 && value.length <= 100000;
   }
 
 }
 function getPriceErrorMessage() {
   switch(adForm.querySelector('#type').value){
-    case 'bungalow':
+    case HouseTypes.Bungalow:
       return 'Минимальная цена за ночь 0 руб, максимальная 100000 руб';
-    case 'flat':
+    case HouseTypes.Flat:
       return 'Минимальная цена за ночь 1000 руб, максимальная 100000 руб';
-    case 'hotel':
+    case HouseTypes.Hotel:
       return 'Минимальная цена за ночь 3000 руб, максимальная 100000 руб';
-    case 'house':
+    case HouseTypes.House:
       return 'Минимальная цена за ночь 5000 руб, максимальная 100000 руб';
-    case 'palace':
+    case HouseTypes.Palace:
       return 'Минимальная цена за ночь 10000 руб, максимальная 100000 руб';
   }
 }
