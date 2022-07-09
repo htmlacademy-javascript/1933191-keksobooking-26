@@ -1,7 +1,5 @@
-import { getHotel,getGenerationArray } from './data.js';
+import { getGenerationArray } from './data.js';
 
-const canvas= document.querySelector('.map__canvas');
-const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const getTypeHotel=function(type){
   switch(type){
@@ -37,7 +35,10 @@ const getFeatureList = function(array,features){
   }
 };
 
-const getHotelList=()=> {
+const getHotelListPopup=()=> {
+  const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
+  const popupArray=[];
+
   getGenerationArray().forEach((hotel) =>{
     const popupElement = popupTemplate.cloneNode(true);
     popupElement.querySelector('.popup__title').textContent=hotel.offer.title;
@@ -50,8 +51,9 @@ const getHotelList=()=> {
     popupElement.querySelector('.popup__description').textContent=hotel.offer.description;
     popupElement.querySelector('.popup__photos').append=getPhotosList(hotel.offer.photos,popupElement.querySelector('.popup__photo'),popupElement.querySelector('.popup__photos'));
     popupElement.querySelector('.popup__avatar').src=hotel.author.avatar;
-    canvas.appendChild(popupElement);
+    popupArray.push(popupElement);
   });
+  return popupArray;
 };
 
-export {getHotelList};
+export {getHotelListPopup};

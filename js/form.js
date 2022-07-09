@@ -5,6 +5,11 @@ const mapFilters = document.querySelector('.map__filters');
 const mapFeatures = document.querySelector('.map__features');
 const roomsField = adForm.querySelector('[name="rooms"]');
 const capacityField = adForm.querySelector('[name="capacity"]');
+const typeField = adForm.querySelector('#type');
+const priceField = adForm.querySelector('#price');
+const timeInField = adForm.querySelector('#timein');
+const timeOutField = adForm.querySelector('#timeout');
+const sliderField= adForm.querySelector('.ad-form__slider');
 const HouseTypes = {
   Bungalow: 'bungalow',
   Flat: 'flat',
@@ -19,6 +24,7 @@ const makeInactiveForm = () =>{
   adFormElement.setAttribute('disabled', 'disabled');
   mapFilters.classList.add('map__filters--disabled');
   mapFeatures.setAttribute('disabled', 'disabled');
+  sliderField.setAttribute('disabled', true);
 };
 
 const makeActiveForm = () => {
@@ -27,6 +33,7 @@ const makeActiveForm = () => {
   adFormElement.removeAttribute('disabled', 'disabled');
   mapFilters.classList.remove('map__filters--disabled');
   mapFeatures.removeAttribute('disabled', 'disabled');
+  sliderField.removeAttribute('disabled','disabled');
 };
 
 const pristine = new Pristine(adForm, {
@@ -36,7 +43,7 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
   errorTextTag: 'span',
   errorTextClass: 'ad-form__error'
-},false);
+});
 
 function validateTitle (value) {
   return value.length >= 30 && value.length <= 100;
@@ -47,7 +54,7 @@ function getTitleErrorMessage() {
 
 
 function validatePrice (value) {
-  switch(adForm.querySelector('#type').value){
+  switch(typeField.value){
     case HouseTypes.Bungalow:
       return value.length >= 0 && value.length <= 100000;
     case HouseTypes.Flat:
@@ -62,7 +69,7 @@ function validatePrice (value) {
 
 }
 function getPriceErrorMessage() {
-  switch(adForm.querySelector('#type').value){
+  switch(typeField.value){
     case HouseTypes.Bungalow:
       return 'Минимальная цена за ночь 0 руб, максимальная 100000 руб';
     case HouseTypes.Flat:
@@ -75,6 +82,33 @@ function getPriceErrorMessage() {
       return 'Минимальная цена за ночь 10000 руб, максимальная 100000 руб';
   }
 }
+
+typeField.addEventListener('change', () => {
+  switch (typeField.value) {
+    case HouseTypes.Bungalow:
+      priceField.placeholder = 0;
+      return;
+    case HouseTypes.Flat:
+      priceField.placeholder = 1000;
+      return;
+    case HouseTypes.Hotel:
+      priceField.placeholder = 3000;
+      return;
+    case HouseTypes.House:
+      priceField.placeholder = 5000;
+      return;
+    case HouseTypes.Palace:
+      priceField.placeholder = 10000;
+  }
+});
+
+timeInField.addEventListener('click', () => {
+  timeOutField.value = timeInField.value;
+});
+
+timeOutField.addEventListener('click', () => {
+  timeInField.value=timeOutField.value;
+});
 
 pristine.addValidator(adForm.querySelector('#title'),validateTitle,getTitleErrorMessage);
 pristine.addValidator(adForm.querySelector('#price'),validatePrice,getPriceErrorMessage);
@@ -100,6 +134,7 @@ function getRoomsErrorMessage(){
 
 pristine.addValidator(roomsField,validateSettlement,getRoomsErrorMessage);
 pristine.addValidator(capacityField,validateSettlement,getRoomsErrorMessage);
+
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
