@@ -20,20 +20,20 @@ const HouseTypes = {
 
 const makeInactiveForm = () =>{
   adForm.classList.add('ad-form--disabled');
-  adFormHeader.setAttribute('disabled', 'disabled');
-  adFormElement.setAttribute('disabled', 'disabled');
+  adFormHeader.setAttribute('disabled');
+  adFormElement.setAttribute('disabled');
   mapFilters.classList.add('map__filters--disabled');
-  mapFeatures.setAttribute('disabled', 'disabled');
+  mapFeatures.setAttribute('disabled');
   sliderField.setAttribute('disabled', true);
 };
 
 const makeActiveForm = () => {
   adForm.classList.remove('ad-form--disabled');
-  adFormHeader.removeAttribute('disabled', 'disabled');
-  adFormElement.removeAttribute('disabled', 'disabled');
+  adFormHeader.removeAttribute('disabled');
+  adFormElement.removeAttribute('disabled');
   mapFilters.classList.remove('map__filters--disabled');
-  mapFeatures.removeAttribute('disabled', 'disabled');
-  sliderField.removeAttribute('disabled','disabled');
+  mapFeatures.removeAttribute('disabled');
+  sliderField.removeAttribute('disabled');
 };
 
 const pristine = new Pristine(adForm, {
