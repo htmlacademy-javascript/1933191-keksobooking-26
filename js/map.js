@@ -7,7 +7,7 @@ const START_LNG = 139.7242175;
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    makeActiveForm();
+    // makeActiveForm();
   })
 
   .setView({
@@ -54,12 +54,11 @@ mainMarker.on('moveend',(evt)=> {
 const markerGroup = L.layerGroup().addTo(map);
 
 
-const commonMarker = ()=>{
-  const generatedArray = getGenerationArray();
+const commonMarker = (array)=>{
 
-  for(let i=0;i<generatedArray.length;i++){
-    const lat = generatedArray[i].location.lat;
-    const lng = generatedArray[i].location.lng;
+  for(let i=0;i<array.length;i++){
+    const lat = array[i].location.lat;
+    const lng = array[i].location.lng;
 
     const similarMarker = L.marker(
       {
@@ -70,7 +69,7 @@ const commonMarker = ()=>{
         icon:similarPinIcon,
       },
     );
-    similarMarker.addTo(markerGroup).bindPopup(getHotelListPopup()[i]);
+    similarMarker.addTo(markerGroup).bindPopup(getHotelListPopup(array)[i]);
 
   }
 };
