@@ -34,6 +34,7 @@ const makeInactiveForm = () =>{
   sliderField.setAttribute('disabled', true);
 };
 
+
 const makeActiveForm = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormHeader.removeAttribute('disabled');
@@ -42,7 +43,6 @@ const makeActiveForm = () => {
   mapFeatures.removeAttribute('disabled');
   sliderField.removeAttribute('disabled');
 };
-
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
   errorClass: 'ad-form__element--invalid',
@@ -120,9 +120,10 @@ timeOutField.addEventListener('click', () => {
 pristine.addValidator(titleField,validateTitle,getTitleErrorMessage);
 pristine.addValidator(priceField,validatePrice,getPriceErrorMessage);
 
+validateValueRoom();
 roomsField.addEventListener('change',()=>{
   validateValueRoom();
-})
+});
 
 function validateSettlement () {
   if(roomsField.value<capacityField.value){
@@ -167,8 +168,8 @@ const setUserFormSubmit=()=>{
 const setUserFormReset=()=>{
   resetButton.addEventListener('click', () => {
     titleField.value='';
-    addressField.value='';
     typeField.value='flat';
+    priceField.placeholder='1000';
     priceField.value='';
     timeInField.value= '12:00';
     timeOutField.value= '12:00';
@@ -176,4 +177,4 @@ const setUserFormReset=()=>{
     capacityField.value='3';
   });
 };
-export {makeInactiveForm,makeActiveForm,setUserFormSubmit};
+export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};

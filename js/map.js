@@ -1,5 +1,5 @@
-import { getGenerationArray } from './data.js';
 import { makeActiveForm } from './form.js';
+import { getGenerationArray } from './data.js';
 import { getHotelListPopup } from './hotels.js';
 const address = document.querySelector('#address');
 const START_LAT = 35.6780754;
@@ -8,6 +8,8 @@ const START_LNG = 139.7242175;
 const map = L.map('map-canvas')
   .on('load', () => {
     // makeActiveForm();
+    address.setAttribute('disabled','disabled');
+    address.classList.add('ad-form--disabled');
   })
 
   .setView({
@@ -43,6 +45,7 @@ const mainMarker = L.marker(
     draggable: true,
     icon:mainPinIcon,
   },
+  address.value= [START_LAT,START_LNG]
 );
 
 mainMarker.addTo(map);

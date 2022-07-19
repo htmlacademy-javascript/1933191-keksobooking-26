@@ -2,14 +2,13 @@ import { commonMarker } from './map.js';
 import { showMessage } from './util.js';
 const ADDITIONAL_HOTELS_COUNT= 10;
 
-const getData=(onSuccess)=>{
+const getData=(onSuccess,onError)=>{
   fetch('https://26.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
     .then((hotels) => {
       onSuccess(hotels.slice(0, ADDITIONAL_HOTELS_COUNT));
     }).catch(()=>{
-      document.querySelector('.map').classList.add('map--error');
-      document.querySelector('.notice').insertBefore(document.querySelector('#error__download').content.querySelector('.error__download'),document.querySelector('.notice__title'));
+      onError();
     });
 };
 const sendData = (onSuccess,onFail,body)=>{
@@ -22,10 +21,12 @@ const sendData = (onSuccess,onFail,body)=>{
   )
     .then((response) => {
       if (response.ok) {
+        onSuccess();
         showMessage('success');
       }
     })
     .catch(() => {
+      onFail();
       showMessage('error');
     });
 };
