@@ -1,5 +1,5 @@
 import { sendData } from './api.js';
-import { showMessage,validateValueRoom } from './util.js';
+import { validateValueRoom } from './util.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -25,6 +25,15 @@ const HouseTypes = {
   Palace: 'palace'
 };
 
+const makeActiveForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  adFormHeader.removeAttribute('disabled');
+  adFormElement.removeAttribute('disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFeatures.removeAttribute('disabled');
+  sliderField.removeAttribute('disabled');
+};
+
 const makeInactiveForm = () =>{
   adForm.classList.add('ad-form--disabled');
   adFormHeader.setAttribute('disabled');
@@ -34,14 +43,7 @@ const makeInactiveForm = () =>{
   sliderField.setAttribute('disabled', true);
 };
 
-const makeActiveForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  adFormHeader.removeAttribute('disabled');
-  adFormElement.removeAttribute('disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFeatures.removeAttribute('disabled');
-  sliderField.removeAttribute('disabled');
-};
+
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -120,9 +122,10 @@ timeOutField.addEventListener('click', () => {
 pristine.addValidator(titleField,validateTitle,getTitleErrorMessage);
 pristine.addValidator(priceField,validatePrice,getPriceErrorMessage);
 
+validateValueRoom();
 roomsField.addEventListener('change',()=>{
   validateValueRoom();
-})
+});
 
 function validateSettlement () {
   if(roomsField.value<capacityField.value){
@@ -167,8 +170,8 @@ const setUserFormSubmit=()=>{
 const setUserFormReset=()=>{
   resetButton.addEventListener('click', () => {
     titleField.value='';
-    addressField.value='';
     typeField.value='flat';
+    priceField.placeholder='1000';
     priceField.value='';
     timeInField.value= '12:00';
     timeOutField.value= '12:00';
@@ -176,4 +179,4 @@ const setUserFormReset=()=>{
     capacityField.value='3';
   });
 };
-export {makeInactiveForm,makeActiveForm,setUserFormSubmit};
+export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};

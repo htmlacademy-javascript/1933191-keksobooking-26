@@ -32,13 +32,16 @@ const getNewRandomArray = function (arrayNumber,arrayName)  {
 };
 
 const showMessage = (status)=>{
-  const Message = document.querySelector(`#${status}`).content.querySelector(`.${status}`);
-  document.querySelector('.map').append(Message);
-  setTimeout(()=>{ Message.remove();}, ALERT_SHOW_TIME);
+  const message = document.querySelector(`#${status}`).content.querySelector(`.${status}`);
+  document.querySelector('.map').append(message);
+  setTimeout(()=>{ message.remove();}, ALERT_SHOW_TIME);
 };
+const setErrorMarkMessage = ()=>{
+  document.querySelector('.map').classList.add('map--error');
+  document.querySelector('.notice').insertBefore(document.querySelector('#error__download').content.querySelector('.error__download'),document.querySelector('.notice__title'));
+}
 
 const validateValueRoom = ()=>{
-
   const adForm = document.querySelector('.ad-form');
   const roomsField = adForm.querySelector('[name="rooms"]');
   const capacityField = adForm.querySelector('[name="capacity"]');
@@ -74,4 +77,4 @@ const validateValueRoom = ()=>{
 };
 
 
-export {getRandomPositiveInteger,getRandomPositiveFloat,getNewRandomArray,showMessage,validateValueRoom};
+export {getRandomPositiveInteger,getRandomPositiveFloat,getNewRandomArray,showMessage,setErrorMarkMessage,validateValueRoom};
