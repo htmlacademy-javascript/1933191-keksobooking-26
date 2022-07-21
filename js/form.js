@@ -1,3 +1,6 @@
+import { sendData } from './api.js';
+import { validateValueRoom } from './util.js';
+
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
 const adFormElement = document.querySelector('.ad-form__element');
@@ -5,17 +8,30 @@ const mapFilters = document.querySelector('.map__filters');
 const mapFeatures = document.querySelector('.map__features');
 const roomsField = adForm.querySelector('[name="rooms"]');
 const capacityField = adForm.querySelector('[name="capacity"]');
+const titleField = adForm.querySelector('#title');
+const addressField = adForm.querySelector('#addressField');
 const typeField = adForm.querySelector('#type');
 const priceField = adForm.querySelector('#price');
 const timeInField = adForm.querySelector('#timein');
 const timeOutField = adForm.querySelector('#timeout');
 const sliderField= adForm.querySelector('.ad-form__slider');
+const submitButton= adForm.querySelector('.ad-form__submit');
+const resetButton= adForm.querySelector('.ad-form__reset');
 const HouseTypes = {
   Bungalow: 'bungalow',
   Flat: 'flat',
   Hotel: 'hotel',
   House: 'house',
   Palace: 'palace'
+};
+
+const makeActiveForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  adFormHeader.removeAttribute('disabled');
+  adFormElement.removeAttribute('disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFeatures.removeAttribute('disabled');
+  sliderField.removeAttribute('disabled');
 };
 
 const makeInactiveForm = () =>{
@@ -27,14 +43,7 @@ const makeInactiveForm = () =>{
   sliderField.setAttribute('disabled', true);
 };
 
-const makeActiveForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  adFormHeader.removeAttribute('disabled');
-  adFormElement.removeAttribute('disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFeatures.removeAttribute('disabled');
-  sliderField.removeAttribute('disabled');
-};
+
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -56,15 +65,15 @@ function getTitleErrorMessage() {
 function validatePrice (value) {
   switch(typeField.value){
     case HouseTypes.Bungalow:
-      return value.length >= 0 && value.length <= 100000;
+      return value >= 0 && value <= 100000;
     case HouseTypes.Flat:
-      return value.length >= 1000 && value.length <= 100000;
+      return value >= 1000 && value <= 100000;
     case HouseTypes.Hotel:
-      return value.length >= 3000 && value.length <= 100000;
+      return value >= 3000 && value <= 100000;
     case HouseTypes.House:
-      return value.length >= 5000 && value.length <= 100000;
+      return value >= 5000 && value <= 100000;
     case HouseTypes.Palace:
-      return value.length >= 10000 && value.length <= 100000;
+      return value >= 10000 && value <= 100000;
   }
 
 }
@@ -110,19 +119,16 @@ timeOutField.addEventListener('click', () => {
   timeInField.value=timeOutField.value;
 });
 
-pristine.addValidator(adForm.querySelector('#title'),validateTitle,getTitleErrorMessage);
-pristine.addValidator(adForm.querySelector('#price'),validatePrice,getPriceErrorMessage);
+pristine.addValidator(titleField,validateTitle,getTitleErrorMessage);
+pristine.addValidator(priceField,validatePrice,getPriceErrorMessage);
+
+validateValueRoom();
+roomsField.addEventListener('change',()=>{
+  validateValueRoom();
+});
 
 function validateSettlement () {
-  const settlementOption =[ [1,2,3],[2,3],[3],[100]];
-  const rooms =roomsField.querySelector('option:checked');
-  const capacity =capacityField.querySelector('option:checked');
-  if (rooms.value<capacity.value) {
-    roomsField.querySelectorAll('option').forEach((item) => item.parentNode.removeChild(item));
-    for(let i=0;i<settlementOption[capacity.value-1].length;i++){
-      const newOption = new Option(`${settlementOption[capacity.value-1][i]} комнаты`, `${settlementOption[capacity.value-1][i]}`);
-      roomsField.appendChild(newOption);
-    }
+  if(roomsField.value<capacityField.value){
     return false;
   }
   return true;
@@ -131,14 +137,46 @@ function validateSettlement () {
 function getRoomsErrorMessage(){
   return 'Для каждого гостя должна быть комната';
 }
-
-pristine.addValidator(roomsField,validateSettlement,getRoomsErrorMessage);
 pristine.addValidator(capacityField,validateSettlement,getRoomsErrorMessage);
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Сохраняю...';
+};
 
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Сохранить';
+};
 
-export {makeInactiveForm,makeActiveForm};
+const setUserFormSubmit=()=>{
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          unblockSubmitButton();
+        },
+        () => {
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+const setUserFormReset=()=>{
+  resetButton.addEventListener('click', () => {
+    titleField.value='';
+    typeField.value='flat';
+    priceField.placeholder='1000';
+    priceField.value='';
+    timeInField.value= '12:00';
+    timeOutField.value= '12:00';
+    roomsField.value = '1';
+    capacityField.value='3';
+  });
+};
+export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};

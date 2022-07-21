@@ -1035,3 +1035,17 @@ fieldset {
 .hidden {
   display: none;
 }
+
+.map--error {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.error__download {
+
+  z-index: 1000;
+}
+
+.error__download-message {
+  font-size: 26px;
+}
