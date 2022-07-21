@@ -1,4 +1,3 @@
-import { commonMarker } from './map.js';
 import { showMessage } from './util.js';
 const ADDITIONAL_HOTELS_COUNT= 10;
 

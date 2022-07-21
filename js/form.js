@@ -1,5 +1,5 @@
 import { sendData } from './api.js';
-import { showMessage,validateValueRoom } from './util.js';
+import { validateValueRoom } from './util.js';
 
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -25,6 +25,15 @@ const HouseTypes = {
   Palace: 'palace'
 };
 
+const makeActiveForm = () => {
+  adForm.classList.remove('ad-form--disabled');
+  adFormHeader.removeAttribute('disabled');
+  adFormElement.removeAttribute('disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFeatures.removeAttribute('disabled');
+  sliderField.removeAttribute('disabled');
+};
+
 const makeInactiveForm = () =>{
   adForm.classList.add('ad-form--disabled');
   adFormHeader.setAttribute('disabled');
@@ -35,14 +44,7 @@ const makeInactiveForm = () =>{
 };
 
 
-const makeActiveForm = () => {
-  adForm.classList.remove('ad-form--disabled');
-  adFormHeader.removeAttribute('disabled');
-  adFormElement.removeAttribute('disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFeatures.removeAttribute('disabled');
-  sliderField.removeAttribute('disabled');
-};
+
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
   errorClass: 'ad-form__element--invalid',
