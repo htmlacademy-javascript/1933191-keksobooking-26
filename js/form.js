@@ -9,7 +9,7 @@ const mapFeatures = document.querySelector('.map__features');
 const roomsField = adForm.querySelector('[name="rooms"]');
 const capacityField = adForm.querySelector('[name="capacity"]');
 const titleField = adForm.querySelector('#title');
-const addressField = adForm.querySelector('#addressField');
+const addressField = adForm.querySelector('#address');
 const typeField = adForm.querySelector('#type');
 const priceField = adForm.querySelector('#price');
 const timeInField = adForm.querySelector('#timein');
@@ -24,6 +24,8 @@ const HouseTypes = {
   House: 'house',
   Palace: 'palace'
 };
+const START_LAT = 35.6780754;
+const START_LNG = 139.7242175;
 
 
 const makeActiveForm = () => {
@@ -43,7 +45,6 @@ const makeInactiveForm = () =>{
   mapFeatures.setAttribute('disabled');
   sliderField.setAttribute('disabled', true);
 };
-
 
 
 const pristine = new Pristine(adForm, {
@@ -168,16 +169,30 @@ const setUserFormSubmit=()=>{
     }
   });
 };
+const adFormHeaderPreviewImage = document.querySelector('.ad-form-header__preview-image');
+const adFormPhotoContainer = document.querySelector('.ad-form__photo-container');
+
 const setUserFormReset=()=>{
   resetButton.addEventListener('click', () => {
+    const adFormPhoto = document.querySelectorAll('.ad-form__photo')
     titleField.value='';
     typeField.value='flat';
+
     priceField.placeholder='1000';
     priceField.value='';
     timeInField.value= '12:00';
     timeOutField.value= '12:00';
     roomsField.value = '1';
     capacityField.value='3';
+    adFormHeaderPreviewImage.src= 'img/muffin-grey.svg';
+    for(let i= 0;i<adFormPhoto.length;i++ ){
+      adFormPhoto[i].parentNode.removeChild(adFormPhoto[i]);
+    }
+    const createAdFormPhoto = document.createElement('div');
+    createAdFormPhoto.classList.add('ad-form__photo');
+    adFormPhotoContainer.append(createAdFormPhoto);
+    addressField.value = [START_LAT,START_LNG];
+    debugger
   });
 };
 export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};

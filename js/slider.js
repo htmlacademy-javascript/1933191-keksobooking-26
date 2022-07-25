@@ -8,17 +8,8 @@ const createSlider= () =>{
       max: 100000,
     },
     start: 1000,
-    step:1,
-    format:{
-      to: function(value){
-        if (Number.isInteger(value)) {
-          return value.toFixed(0);
-        }
-      },
-      from: function(value){
-        return parseFloat(value);
-      }
-    },
+    step:10,
+
   });
   sliderElement.noUiSlider.on('slide',()=>{
     valueElement.value= sliderElement.noUiSlider.get();
