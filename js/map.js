@@ -1,11 +1,33 @@
 import { makeActiveForm } from './form.js';
-import { getHotelListPopup } from './hotels.js';
+import { getHotelListPopup,getHotelFilterListPopup } from './hotels.js';
+import { getData } from './api.js';
+import { setErrorMarkMessage } from './util.js';
+
 const address = document.querySelector('#address');
 const START_LAT = 35.6780754;
 const START_LNG = 139.7242175;
+const PRICE_FOR_FILTER= {
+  low: {
+    min: 0,
+    max: 10000,
+  },
+  middle: {
+    min: 10000,
+    max: 50000,
+  },
+  high: {
+    min: 50000,
+    max: 100000,
+  },
+  any: {
+    min: 0,
+    max: 100000,
+  },
+}
+const map = L.map('map-canvas');
 
 const setupMap = (array) => {
-  const map = L.map('map-canvas')
+  map
   .on('load', () => {
     makeActiveForm();
     address.setAttribute('disabled','disabled');
@@ -55,22 +77,87 @@ const setupMap = (array) => {
   
   const markerGroup = L.layerGroup().addTo(map);
   
-  for(let i=0;i<array.length;i++){
-  const lat = array[i].location.lat;
-  const lng = array[i].location.lng;
   
-  const similarMarker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      icon:similarPinIcon,
-    },
-  );
+  for(let i=0;i<array.length;i++){
+    const lat = array[i].location.lat;
+    const lng = array[i].location.lng;
+    const similarMarker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon:similarPinIcon,
+      },
+    );
     similarMarker.addTo(markerGroup).bindPopup(getHotelListPopup(array)[i]);
   
   }
+  const similarMarker =(arrayLat,arrayLng)=>{
+    console.log(arrayLat)
+      return L.marker(
+      {
+        lat:arrayLat,
+        lng:arrayLng,
+      },
+      {
+        icon:similarPinIcon,
+      },
+    );
+  }
+};
+const filteringArray =(elementsForFiltering)=>{
+  const housingTypeValue = document.querySelector('#housing-type').value;
+  const housingPriceValue = document.querySelector('#housing-price').value;
+  const housingRoomsValue = document.querySelector('#housing-rooms').value;
+  const housingGuestsValue = document.querySelector('#housing-guests').value;
+  const housingFeaturesValue = document.querySelector('#housing-features').value;
+  
+  const typeFiltering = (elementFiltering)=>{
+    housingTypeValue === elementFiltering.offer.type || housingTypeValue === 'any';
+  }
+  const priceFiltering =(elementFiltering)=>{
+    elementFiltering.offer.price>= PRICE_FOR_FILTER[housingPriceValue].min && elementFiltering.offer.price <= PRICE_FOR_FILTER[housingPriceValue].max;
+
+  }
+  const roomsFiltering = (elementFiltering) => {
+    elementFiltering.offer.rooms.toString() === housingRoomsValue || housingRoomsValue === 'any';
+  }
+  const guestsFiltering = (elementFiltering) => {
+    elementFiltering.offer.guests.toString() === housingGuestsValue || housingGuestsValue === 'any';
+  }
+  const featuresFiltering = (elementFiltering) => {
+
+    const checkedFilters = housingFeaturesValue.querySelectorAll('input:checked');
+    const emptyArray = [];
+    checkedFilters.forEach((element) => emptyArray.push(element.value));
+    if (elementFiltering.offer.features){
+      return emptyArray.every((feature) => elementFiltering.offer.features.includes(feature));
+    }
+    return false;
   };
+  const checkFilters = (element) =>{
+    typeFiltering(element)
+    && priceFiltering(element)
+    && roomsFiltering(element)
+    && guestsFiltering(element)
+    && featuresFiltering(element);
+  }
+  const filteredArray = [];
+  console.log(elementsForFiltering)
+for (let i = 0; i < elementsForFiltering.length; i++) {
+    console.log(elementsForFiltering[i])
+    filteredArray.push(checkFilters(elementsForFiltering[i]));
+}
+console.log(filteredArray)
+return filteredArray
+}
+
+const hotelFormInput = document.querySelector('.map__filters');
+    hotelFormInput.addEventListener('change',()=>{
+      const markerGroup = L.layerGroup().addTo(map);
+      markerGroup.clearLayers();
+      getData((array)=>{setupMap(filteringArray(array))});
+    })
   
 export {setupMap};

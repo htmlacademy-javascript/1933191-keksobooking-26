@@ -1,4 +1,4 @@
-const ALERT_SHOW_TIME = 2000;
+ const ALERT_SHOW_TIME = 2000;
 
 function getRandomPositiveFloat (min,max, maxDigits = 0) {
   if (min > max || min < 0 || max <= 0) {

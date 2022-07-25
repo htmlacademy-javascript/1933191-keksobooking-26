@@ -25,6 +25,7 @@ const HouseTypes = {
   Palace: 'palace'
 };
 
+
 const makeActiveForm = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormHeader.removeAttribute('disabled');

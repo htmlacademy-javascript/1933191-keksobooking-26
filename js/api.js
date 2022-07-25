@@ -1,13 +1,13 @@
-import { showMessage } from './util.js';
+import { showMessage,setErrorMarkMessage } from './util.js';
 const ADDITIONAL_HOTELS_COUNT= 10;
 
-const getData=(onSuccess,onError)=>{
+const getData=(onSuccess)=>{
   fetch('https://26.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
     .then((hotels) => {
       onSuccess(hotels.slice(0, ADDITIONAL_HOTELS_COUNT));
     }).catch(()=>{
-      onError();
+      setErrorMarkMessage()
     });
 };
 const sendData = (onSuccess,onFail,body)=>{
