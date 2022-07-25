@@ -1,4 +1,4 @@
- const ALERT_SHOW_TIME = 2000;
+const ALERT_SHOW_TIME = 2000;
 
 function getRandomPositiveFloat (min,max, maxDigits = 0) {
   if (min > max || min < 0 || max <= 0) {
@@ -39,7 +39,7 @@ const showMessage = (status)=>{
 const setErrorMarkMessage = ()=>{
   document.querySelector('.map').classList.add('map--error');
   document.querySelector('.notice').insertBefore(document.querySelector('#error__download').content.querySelector('.error__download'),document.querySelector('.notice__title'));
-}
+};
 
 const validateValueRoom = ()=>{
   const adForm = document.querySelector('.ad-form');
@@ -76,5 +76,13 @@ const validateValueRoom = ()=>{
   }
 };
 
+function debounce (callback, timeoutDelay = 500) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
 
-export {getRandomPositiveInteger,getRandomPositiveFloat,getNewRandomArray,showMessage,setErrorMarkMessage,validateValueRoom};
+
+export {getRandomPositiveInteger,getRandomPositiveFloat,getNewRandomArray,showMessage,setErrorMarkMessage,validateValueRoom,debounce};

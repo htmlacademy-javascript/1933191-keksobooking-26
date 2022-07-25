@@ -7,7 +7,7 @@ const getData=(onSuccess)=>{
     .then((hotels) => {
       onSuccess(hotels.slice(0, ADDITIONAL_HOTELS_COUNT));
     }).catch(()=>{
-      setErrorMarkMessage()
+      setErrorMarkMessage();
     });
 };
 const sendData = (onSuccess,onFail,body)=>{
