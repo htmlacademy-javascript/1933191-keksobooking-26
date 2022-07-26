@@ -27,8 +27,6 @@ const HouseTypes = {
 };
 const START_LAT = 35.6780754;
 const START_LNG = 139.7242175;
-const RELOAD_DELAY = 500;
-
 
 const makeActiveForm = () => {
   adForm.classList.remove('ad-form--disabled');
@@ -213,7 +211,7 @@ const reloadMap =()=>{
   });
 }
 
-  adForm.addEventListener('reset', debounce((evt) => {
+  adForm.addEventListener('reset', (evt) => {
     evt.preventDefault();
     adForm.reset();
     pristine.reset();
@@ -221,7 +219,7 @@ const reloadMap =()=>{
     reloadMap()
     setFilterMapReset();
     addressField.value = [START_LAT,START_LNG];
-  },RELOAD_DELAY));
+  });
   
 
 export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};
