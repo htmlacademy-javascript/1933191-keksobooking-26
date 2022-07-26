@@ -25,10 +25,9 @@ fileChooserHouse.addEventListener('change', () => {
       ));
     if (matches) {
       const ImageCopy = previewHouse.cloneNode(true);
-      previewHouse.remove()
-
+      previewHouse.remove();
       ImageCopy.innerHTML=`<img src="${URL.createObjectURL(file)}" class="ad-form__image-hotel" alt="Фотографии отеля" width="70" height="70">`;
-      adFormPhotoContainer.appendChild(ImageCopy)
+      adFormPhotoContainer.appendChild(ImageCopy);
     }
   }
 });

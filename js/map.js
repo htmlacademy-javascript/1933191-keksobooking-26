@@ -141,14 +141,14 @@ const createMarkers=(array)=>{
     const lng = array[i].location.lng;
     L.marker([lat,lng],{icon: similarPinIcon}).addTo(markerGroup).bindPopup(getHotelListPopup(array)[i]);
   }
-}
+};
 
 const mapFilterDelayUpdate =()=>{
   const hotelFormInput = document.querySelector('.map__filters');
   hotelFormInput.addEventListener('change',debounce(()=>{
     markerGroup.clearLayers();
     getData((array)=>{
-      createMarkers(filteringArray(array))
+      createMarkers(filteringArray(array));
     });
   },RELOAD_DELAY));
 };

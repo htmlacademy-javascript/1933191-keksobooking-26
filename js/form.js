@@ -1,5 +1,5 @@
 import { sendData,getData } from './api.js';
-import { debounce, validateValueRoom } from './util.js';
+import { validateValueRoom } from './util.js';
 import { markerGroup,setupMap,filteringArray,mainMarker } from './map.js';
 
 
@@ -174,9 +174,9 @@ const setUserFormReset=()=>{
   const adFormHeaderPreviewImage = document.querySelector('.ad-form-header__preview-image');
   adFormHeaderPreviewImage.src='img/muffin-grey.svg';
   const adFormPhotoContainer = document.querySelector('.ad-form__photo-container');
-  const adFormPhoto = document.querySelectorAll('.ad-form__photo')
-  const descriptionField = document.querySelector('#description')
-  const featuresCheckbox = document.querySelectorAll('.features__checkbox:checked')
+  const adFormPhoto = document.querySelectorAll('.ad-form__photo');
+  const descriptionField = document.querySelector('#description');
+  const featuresCheckbox = document.querySelectorAll('.features__checkbox:checked');
   titleField.value='';
   typeField.value='flat';
   addressField.value = [START_LAT,START_LNG];
@@ -191,7 +191,6 @@ const setUserFormReset=()=>{
   for(let i= 0;i<featuresCheckbox.length;i++ ){
     featuresCheckbox[i].checked = false;
   }
-  
   for(let i= 0;i<adFormPhoto.length;i++ ){
     adFormPhoto[i].parentNode.removeChild(adFormPhoto[i]);
   }
@@ -200,26 +199,26 @@ const setUserFormReset=()=>{
   adFormPhotoContainer.append(createAdFormPhoto);
 };
 const setFilterMapReset=()=>{
-  const mapFilters=document.querySelector('.map__filters');
-  mapFilters.reset();
-}
+  const mapFilter=document.querySelector('.map__filters');
+  mapFilter.reset();
+};
 const reloadMap =()=>{
   markerGroup.clearLayers();
-  mainMarker.setLatLng([START_LAT,START_LNG])
+  mainMarker.setLatLng([START_LAT,START_LNG]);
   getData((array)=>{
     setupMap(filteringArray(array));
   });
-}
+};
 
-  adForm.addEventListener('reset', (evt) => {
-    evt.preventDefault();
-    adForm.reset();
-    pristine.reset();
-    setUserFormReset();
-    reloadMap()
-    setFilterMapReset();
-    addressField.value = [START_LAT,START_LNG];
-  });
-  
+adForm.addEventListener('reset', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  pristine.reset();
+  setUserFormReset();
+  reloadMap();
+  setFilterMapReset();
+  addressField.value = [START_LAT,START_LNG];
+});
+
 
 export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};
