@@ -27,6 +27,7 @@ const HouseTypes = {
 };
 const START_LAT = 35.6780754;
 const START_LNG = 139.7242175;
+const RELOAD_DELAY = 500;
 
 
 const makeActiveForm = () => {
