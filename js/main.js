@@ -10,6 +10,4 @@ import './avatar.js';
 createSlider();
 getData(setupMap,setErrorMarkMessage);
 mapFilterDelayUpdate();
-setUserFormReset();
 setUserFormSubmit();
-
