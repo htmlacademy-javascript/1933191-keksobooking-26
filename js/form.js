@@ -1,5 +1,5 @@
 import { sendData,getData } from './api.js';
-import { validateValueRoom } from './util.js';
+import { debounce, validateValueRoom } from './util.js';
 import { markerGroup,setupMap,filteringArray,mainMarker } from './map.js';
 
 
@@ -210,10 +210,9 @@ const reloadMap =()=>{
   getData((array)=>{
     setupMap(filteringArray(array));
   });
-  
 }
 
-  adForm.addEventListener('reset', (evt) => {
+  adForm.addEventListener('reset', debounce((evt) => {
     evt.preventDefault();
     adForm.reset();
     pristine.reset();
@@ -221,7 +220,7 @@ const reloadMap =()=>{
     reloadMap()
     setFilterMapReset();
     addressField.value = [START_LAT,START_LNG];
-  });
+  },RELOAD_DELAY));
   
 
 export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};
