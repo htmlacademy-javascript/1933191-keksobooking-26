@@ -43,6 +43,11 @@ const mainMarker = L.marker(
   },
   address.value= [START_LAT,START_LNG]
 );
+const similarPinIcon = L.icon({
+  iconUrl: 'img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
 
 const setupMap = (array) => {
   map
@@ -62,17 +67,6 @@ const setupMap = (array) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
-
-  
-
-  const similarPinIcon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
-
-  
-
   mainMarker.addTo(map);
 
   mainMarker.on('moveend',(evt)=> {
@@ -101,7 +95,6 @@ const filteringArray =(elementsForFiltering)=>{
   const housingRoomsValue = document.querySelector('#housing-rooms').value;
   const housingGuestsValue = document.querySelector('#housing-guests').value;
   const housingFeatures=document.querySelector('#housing-features');
-
 
   const typeFiltering = (elementFiltering)=>(
     housingTypeValue === elementFiltering.offer.type || housingTypeValue === 'any'
@@ -142,12 +135,20 @@ const filteringArray =(elementsForFiltering)=>{
   }
   return filteredArray;
 };
+const createMarkers=(array)=>{
+  for(let i=0;i<array.length;i++){
+    const lat = array[i].location.lat;
+    const lng = array[i].location.lng;
+    L.marker([lat,lng],{icon: similarPinIcon}).addTo(markerGroup).bindPopup(getHotelListPopup(array)[i]);
+  }
+}
+
 const mapFilterDelayUpdate =()=>{
   const hotelFormInput = document.querySelector('.map__filters');
   hotelFormInput.addEventListener('change',debounce(()=>{
     markerGroup.clearLayers();
     getData((array)=>{
-      setupMap(filteringArray(array));
+      createMarkers(filteringArray(array))
     });
   },RELOAD_DELAY));
 };
