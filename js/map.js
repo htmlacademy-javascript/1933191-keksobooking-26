@@ -27,12 +27,28 @@ const PRICE_FOR_FILTER= {
 const RELOAD_DELAY = 500;
 const map = L.map('map-canvas');
 const markerGroup = L.layerGroup().addTo(map);
+const mainPinIcon = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+const mainMarker = L.marker(
+  {
+    lat: START_LAT,
+    lng: START_LNG,
+  },
+  {
+    draggable: true,
+    icon:mainPinIcon,
+  },
+  address.value= [START_LAT,START_LNG]
+);
 
 const setupMap = (array) => {
   map
     .on('load', () => {
       makeActiveForm();
-      address.setAttribute('disabled','disabled');
+      address.setAttribute('readonly','readonly');
       address.classList.add('ad-form--disabled');
     })
     .setView({
@@ -47,11 +63,7 @@ const setupMap = (array) => {
     },
   ).addTo(map);
 
-  const mainPinIcon = L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
+  
 
   const similarPinIcon = L.icon({
     iconUrl: 'img/pin.svg',
@@ -59,17 +71,7 @@ const setupMap = (array) => {
     iconAnchor: [20, 40],
   });
 
-  const mainMarker = L.marker(
-    {
-      lat: START_LAT,
-      lng: START_LNG,
-    },
-    {
-      draggable: true,
-      icon:mainPinIcon,
-    },
-    address.value= [START_LAT,START_LNG]
-  );
+  
 
   mainMarker.addTo(map);
 
@@ -150,4 +152,4 @@ const mapFilterDelayUpdate =()=>{
   },RELOAD_DELAY));
 };
 
-export {setupMap,mapFilterDelayUpdate};
+export {setupMap,mapFilterDelayUpdate,markerGroup,filteringArray,mainMarker};
