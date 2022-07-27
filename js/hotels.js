@@ -23,13 +23,12 @@ const getPhotosList = function(array,photo,photos){
 
 const getFeatureList =(array,features)=>{
   if(array === undefined) {
-    return 
+    return;
   }
   while (features.firstChild) {
     features.removeChild(features.firstChild);
   }
   for(let i =0;i <array.length;i++) {
-    
     const li = document.createElement('li');
     li.classList.add('popup__feature',`popup__feature--${array[i]}`);
     features.append(li);
