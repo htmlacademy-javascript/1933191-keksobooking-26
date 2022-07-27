@@ -1,5 +1,7 @@
-import { sendData } from './api.js';
+import { sendData,getData } from './api.js';
 import { validateValueRoom } from './util.js';
+import { markerGroup,setupMap,filteringArray,mainMarker } from './map.js';
+
 
 const adForm = document.querySelector('.ad-form');
 const adFormHeader = document.querySelector('.ad-form-header');
@@ -16,7 +18,6 @@ const timeInField = adForm.querySelector('#timein');
 const timeOutField = adForm.querySelector('#timeout');
 const sliderField= adForm.querySelector('.ad-form__slider');
 const submitButton= adForm.querySelector('.ad-form__submit');
-const resetButton= adForm.querySelector('.ad-form__reset');
 const HouseTypes = {
   Bungalow: 'bungalow',
   Flat: 'flat',
@@ -26,7 +27,6 @@ const HouseTypes = {
 };
 const START_LAT = 35.6780754;
 const START_LNG = 139.7242175;
-
 
 const makeActiveForm = () => {
   adForm.classList.remove('ad-form--disabled');
@@ -169,30 +169,56 @@ const setUserFormSubmit=()=>{
     }
   });
 };
-const adFormHeaderPreviewImage = document.querySelector('.ad-form-header__preview-image');
-const adFormPhotoContainer = document.querySelector('.ad-form__photo-container');
 
 const setUserFormReset=()=>{
-  resetButton.addEventListener('click', () => {
-    const adFormPhoto = document.querySelectorAll('.ad-form__photo')
-    titleField.value='';
-    typeField.value='flat';
+  const adFormHeaderPreviewImage = document.querySelector('.ad-form-header__preview-image');
+  adFormHeaderPreviewImage.src='img/muffin-grey.svg';
+  const adFormPhotoContainer = document.querySelector('.ad-form__photo-container');
+  const adFormPhoto = document.querySelectorAll('.ad-form__photo');
+  const descriptionField = document.querySelector('#description');
+  const featuresCheckbox = document.querySelectorAll('.features__checkbox:checked');
+  titleField.value='';
+  typeField.value='flat';
+  addressField.value = [START_LAT,START_LNG];
+  priceField.placeholder='1000';
+  priceField.value='';
+  timeInField.value= '12:00';
+  timeOutField.value= '12:00';
+  roomsField.value = '1';
+  descriptionField.value= '';
+  adFormHeaderPreviewImage.src='img/muffin-grey.svg';
 
-    priceField.placeholder='1000';
-    priceField.value='';
-    timeInField.value= '12:00';
-    timeOutField.value= '12:00';
-    roomsField.value = '1';
-    capacityField.value='3';
-    adFormHeaderPreviewImage.src= 'img/muffin-grey.svg';
-    for(let i= 0;i<adFormPhoto.length;i++ ){
-      adFormPhoto[i].parentNode.removeChild(adFormPhoto[i]);
-    }
-    const createAdFormPhoto = document.createElement('div');
-    createAdFormPhoto.classList.add('ad-form__photo');
-    adFormPhotoContainer.append(createAdFormPhoto);
-    addressField.value = [START_LAT,START_LNG];
-    debugger
+  for(let i= 0;i<featuresCheckbox.length;i++ ){
+    featuresCheckbox[i].checked = false;
+  }
+  for(let i= 0;i<adFormPhoto.length;i++ ){
+    adFormPhoto[i].parentNode.removeChild(adFormPhoto[i]);
+  }
+  const createAdFormPhoto = document.createElement('div');
+  createAdFormPhoto.classList.add('ad-form__photo');
+  adFormPhotoContainer.append(createAdFormPhoto);
+};
+const setFilterMapReset=()=>{
+  const mapFilter=document.querySelector('.map__filters');
+  mapFilter.reset();
+};
+const reloadMap =()=>{
+  markerGroup.clearLayers();
+  mainMarker.setLatLng([START_LAT,START_LNG]);
+  getData((array)=>{
+    setupMap(filteringArray(array));
   });
 };
+
+adForm.addEventListener('reset', (evt) => {
+  evt.preventDefault();
+  adForm.reset();
+  pristine.reset();
+  setUserFormReset();
+  reloadMap();
+  setFilterMapReset();
+  addressField.value = [START_LAT,START_LNG];
+});
+
+
 export {makeInactiveForm,makeActiveForm,setUserFormSubmit,setUserFormReset};
