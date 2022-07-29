@@ -2,8 +2,6 @@ import { makeActiveForm } from './form.js';
 import { getHotelListPopup } from './hotels.js';
 import { getData } from './api.js';
 import { debounce } from './util.js';
-
-const address = document.querySelector('#address');
 const START_LAT = 35.6780754;
 const START_LNG = 139.7242175;
 const PRICE_FOR_FILTER= {
@@ -24,6 +22,8 @@ const PRICE_FOR_FILTER= {
     max: 100000,
   },
 };
+const address = document.querySelector('#address');
+
 const RELOAD_DELAY = 500;
 const map = L.map('map-canvas');
 const markerGroup = L.layerGroup().addTo(map);
@@ -110,19 +110,18 @@ const filteringArray =(elementsForFiltering)=>{
     elementFiltering.offer.guests.toString() === housingGuestsValue || housingGuestsValue === 'any'
   );
   const featuresFiltering = (elementFiltering) => {
-
     const checkedFilters = housingFeatures.querySelectorAll('input:checked');
 
     const emptyArray = [];
-    checkedFilters.forEach((element) => emptyArray.push(element.value));
+    checkedFilters.forEach((element) => (emptyArray.push(element.value)));
     if (elementFiltering.offer.features){
-      return emptyArray.every((feature) => elementFiltering.offer.features.includes(feature));
+      return emptyArray.every((feature) => (elementFiltering.offer.features.includes(feature)));
     }
-    return false;
+    return true;
   };
   const checkFilters = (element) =>(
-    typeFiltering(element) && priceFiltering(element)
-
+    typeFiltering(element)
+    && priceFiltering(element)
     && roomsFiltering(element)
     && guestsFiltering(element)
     && featuresFiltering(element)
@@ -153,4 +152,4 @@ const mapFilterDelayUpdate =()=>{
   },RELOAD_DELAY));
 };
 
-export {setupMap,mapFilterDelayUpdate,markerGroup,filteringArray,mainMarker};
+export {setupMap,mapFilterDelayUpdate,markerGroup,filteringArray,mainMarker,createMarkers};

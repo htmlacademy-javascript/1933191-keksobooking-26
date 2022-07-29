@@ -1,4 +1,12 @@
 const ALERT_SHOW_TIME = 2000;
+const VALUE_GUESTS = {
+  threeGuests: '3',
+  twoGuests: '2',
+  oneGuest: '1',
+  noGuests: '100'
+};
+const TIME_RERENDER = 500;
+
 
 function getRandomPositiveFloat (min,max, maxDigits = 0) {
   if (min > max || min < 0 || max <= 0) {
@@ -47,14 +55,14 @@ const validateValueRoom = ()=>{
   const capacityField = adForm.querySelector('[name="capacity"]');
   capacityField.querySelectorAll('option').forEach((item) => item.parentNode.removeChild(item));
   switch (roomsField.value){
-    case '3':
+    case VALUE_GUESTS.threeGuests:
       for(let i=1;i<=3;i++){
         const newOption= new Option(`для ${i} гостей`, `${i}`);
 
         capacityField.appendChild(newOption);
       }
       return;
-    case '2':
+    case VALUE_GUESTS.twoGuests:
       for(let i=1;i<=2;i++){
 
         const newOption= new Option(`для ${i} гостей`, `${i}`);
@@ -62,13 +70,13 @@ const validateValueRoom = ()=>{
         capacityField.appendChild(newOption);
       }
       return;
-    case '1':
+    case VALUE_GUESTS.oneGuest:
       for(let i=1;i<=1;i++){
         const newOption= new Option(`для ${i} гостей`, `${i}`);
         capacityField.appendChild(newOption);
       }
       return;
-    case '100':
+    case VALUE_GUESTS.noGuests:
       for(let i=1;i<=1;i++){
         const newOption= new Option('не для гостей', '0');
         capacityField.appendChild(newOption);
@@ -76,7 +84,7 @@ const validateValueRoom = ()=>{
   }
 };
 
-function debounce (callback, timeoutDelay = 500) {
+function debounce (callback, timeoutDelay = TIME_RERENDER) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
