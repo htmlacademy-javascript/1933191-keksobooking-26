@@ -2,8 +2,6 @@ import { makeActiveForm } from './form.js';
 import { getHotelListPopup } from './hotels.js';
 import { getData } from './api.js';
 import { debounce } from './util.js';
-
-const address = document.querySelector('#address');
 const START_LAT = 35.6780754;
 const START_LNG = 139.7242175;
 const PRICE_FOR_FILTER= {
@@ -24,15 +22,38 @@ const PRICE_FOR_FILTER= {
     max: 100000,
   },
 };
+const address = document.querySelector('#address');
+
 const RELOAD_DELAY = 500;
 const map = L.map('map-canvas');
 const markerGroup = L.layerGroup().addTo(map);
+const mainPinIcon = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+const mainMarker = L.marker(
+  {
+    lat: START_LAT,
+    lng: START_LNG,
+  },
+  {
+    draggable: true,
+    icon:mainPinIcon,
+  },
+  address.value= [START_LAT,START_LNG]
+);
+const similarPinIcon = L.icon({
+  iconUrl: 'img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
 
 const setupMap = (array) => {
   map
     .on('load', () => {
       makeActiveForm();
-      address.setAttribute('disabled','disabled');
+      address.setAttribute('readonly','readonly');
       address.classList.add('ad-form--disabled');
     })
     .setView({
@@ -46,31 +67,6 @@ const setupMap = (array) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
-
-  const mainPinIcon = L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
-
-  const similarPinIcon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
-
-  const mainMarker = L.marker(
-    {
-      lat: START_LAT,
-      lng: START_LNG,
-    },
-    {
-      draggable: true,
-      icon:mainPinIcon,
-    },
-    address.value= [START_LAT,START_LNG]
-  );
-
   mainMarker.addTo(map);
 
   mainMarker.on('moveend',(evt)=> {
@@ -100,7 +96,6 @@ const filteringArray =(elementsForFiltering)=>{
   const housingGuestsValue = document.querySelector('#housing-guests').value;
   const housingFeatures=document.querySelector('#housing-features');
 
-
   const typeFiltering = (elementFiltering)=>(
     housingTypeValue === elementFiltering.offer.type || housingTypeValue === 'any'
   );
@@ -115,19 +110,18 @@ const filteringArray =(elementsForFiltering)=>{
     elementFiltering.offer.guests.toString() === housingGuestsValue || housingGuestsValue === 'any'
   );
   const featuresFiltering = (elementFiltering) => {
-
     const checkedFilters = housingFeatures.querySelectorAll('input:checked');
 
     const emptyArray = [];
-    checkedFilters.forEach((element) => emptyArray.push(element.value));
+    checkedFilters.forEach((element) => (emptyArray.push(element.value)));
     if (elementFiltering.offer.features){
-      return emptyArray.every((feature) => elementFiltering.offer.features.includes(feature));
+      return emptyArray.every((feature) => (elementFiltering.offer.features.includes(feature)));
     }
-    return false;
+    return true;
   };
   const checkFilters = (element) =>(
-    typeFiltering(element) && priceFiltering(element)
-
+    typeFiltering(element)
+    && priceFiltering(element)
     && roomsFiltering(element)
     && guestsFiltering(element)
     && featuresFiltering(element)
@@ -140,14 +134,22 @@ const filteringArray =(elementsForFiltering)=>{
   }
   return filteredArray;
 };
+const createMarkers=(array)=>{
+  for(let i=0;i<array.length;i++){
+    const lat = array[i].location.lat;
+    const lng = array[i].location.lng;
+    L.marker([lat,lng],{icon: similarPinIcon}).addTo(markerGroup).bindPopup(getHotelListPopup(array)[i]);
+  }
+};
+
 const mapFilterDelayUpdate =()=>{
   const hotelFormInput = document.querySelector('.map__filters');
   hotelFormInput.addEventListener('change',debounce(()=>{
     markerGroup.clearLayers();
     getData((array)=>{
-      setupMap(filteringArray(array));
+      createMarkers(filteringArray(array));
     });
   },RELOAD_DELAY));
 };
 
-export {setupMap,mapFilterDelayUpdate};
+export {setupMap,mapFilterDelayUpdate,markerGroup,filteringArray,mainMarker,createMarkers};

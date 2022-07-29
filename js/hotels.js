@@ -1,4 +1,4 @@
-const getTypeHotel=function(type){
+const getTypeHotel=(type)=>{
   switch(type){
     case 'flat':
       return 'Квартира';
@@ -13,7 +13,7 @@ const getTypeHotel=function(type){
   }
 };
 
-const getPhotosList = function(array,photo,photos){
+const getPhotosList = (array,photo,photos)=>{
   photo.remove();
   for(let i =0;i <array.length;i++){
     photo.src=array[i];
